@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using app.Data;
 using app.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -12,43 +13,23 @@ namespace app.Controllers
     [Route("api/[controller]")]
     public class EventController : ControllerBase
     {
+        private readonly DataContext _context;
 
-        public IEnumerable<Event> _event = new Event[] {
-            new Event() {
-                Id = 1,
-                Theme = "Angular 11 e .NET 5",
-                Local = "Rio Preto",
-                Batch = "1º Lote",
-                AmountPeople = 250,
-                Date = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy"),
-                ImageUrl = "photo.png"
-            },
-            new Event() {
-                Id = 2,
-                Theme = "Angular e suas novidades",
-                Local = "São Paulo",
-                Batch = "2º Lote",
-                AmountPeople = 350,
-                Date = DateTime.Now.AddDays(3).ToString("dd/MM/yyyy"),
-                ImageUrl = "photo1.png"
-            }
-        };
-
-        public EventController()
+        public EventController(DataContext context)
         {
-
+            _context = context;
         }
 
         [HttpGet]
         public IEnumerable<Event> Get()
         {
-            return _event;
+            return _context.Events;
         }
 
         [HttpGet("{id}")]
-        public IEnumerable<Event> GetById(int id)
+        public Event GetById(int id)
         {
-            return _event.Where(e => e.Id == id);
+            return _context.Events.FirstOrDefault(e => e.Id == id);
         }
 
         [HttpPut("{id}")]
@@ -64,6 +45,27 @@ namespace app.Controllers
         }
     }
 }
+
+//  public IEnumerable<Event> _event = new Event[] {
+//             new Event() {
+//                 Id = 1,
+//                 Theme = "Angular 11 e .NET 5",
+//                 Local = "Rio Preto",
+//                 Batch = "1º Lote",
+//                 AmountPeople = 250,
+//                 Date = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy"),
+//                 ImageUrl = "photo.png"
+//             },
+//             new Event() {
+//                 Id = 2,
+//                 Theme = "Angular e suas novidades",
+//                 Local = "São Paulo",
+//                 Batch = "2º Lote",
+//                 AmountPeople = 350,
+//                 Date = DateTime.Now.AddDays(3).ToString("dd/MM/yyyy"),
+//                 ImageUrl = "photo1.png"
+//             }
+//         };
 
 //  private static readonly string[] Summaries = new[]
 //         {
